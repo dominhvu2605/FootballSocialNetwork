@@ -47,7 +47,10 @@ class FollowingsService {
         $userId = $data['userId'];
         $listClubs = $this->flRepo->getFollowingsClub($userId);
         foreach ($listClubs as $key => $club) {
-            $listClubs[$key] = $club->full_name;
+            $listClubs[$key] = [
+                'club_id' => $club->club_id_fl,
+                'club_name' => $club->full_name,
+            ];
         }
 
         // return data
@@ -76,7 +79,10 @@ class FollowingsService {
         $userId = $data['userId'];
         $listFootballer = $this->flRepo->getFollowingsFootballer($userId);
         foreach ($listFootballer as $key => $footballer) {
-            $listFootballer[$key] = $footballer->full_name;
+            $listFootballer[$key] = [
+                'footballer_id' => $footballer->footballer_id_fl,
+                'footballer_name' => $footballer->full_name,
+            ];
         }
 
         // return data

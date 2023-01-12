@@ -9,7 +9,7 @@ class FollowingsRepository {
     // followed
     public function getFollowingsClub($userId) {
         return DB::table('followings as fl')
-            ->select('clubs.full_name')
+            ->select('fl.club_id_fl', 'clubs.full_name')
             ->join('clubs', 'clubs.id', '=', 'fl.club_id_fl')
             ->where('fl.user_id', '=', $userId)
             ->whereNotNull('fl.followings_at')
@@ -18,7 +18,7 @@ class FollowingsRepository {
 
     public function getFollowingsFootballer($userId) {
         return DB::table('followings as fl')
-            ->select('fb.full_name')
+            ->select('fl.footballer_id_fl', 'fb.full_name')
             ->join('footballers as fb', 'fb.id', '=', 'fl.footballer_id_fl')
             ->where('fl.user_id', '=', $userId)
             ->whereNotNull('fl.followings_at')

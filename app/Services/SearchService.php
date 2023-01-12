@@ -114,7 +114,7 @@ class SearchService {
 
         // validate input
         $validate = Validator::make($data, [
-            'userId' => 'required|numeric|exists:search_history,user_id'
+            'userId' => 'required|numeric|exists:users,id'
         ]);
         if ($validate->fails()) {
             $return['message'] = $validate->errors()->first();

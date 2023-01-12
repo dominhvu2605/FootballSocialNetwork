@@ -40,24 +40,24 @@ class SearchRepository {
     public function clubSearch($searchKey) {
         return DB::table('clubs')
             ->select('id', 'full_name')
-            ->where(DB::raw('lower(full_name)'), 'like', '%' . strtolower($searchKey) . '%')
-            ->orWhere(DB::raw('lower(short_name)'), 'like', '%' . strtolower($searchKey) . '%')
+            ->where(DB::raw('lower(full_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(short_name)'), 'REGEXP', strtolower($searchKey))
             ->get();
     }
 
     public function footballerSearch($searchKey) {
         return DB::table('footballers')
             ->select('id', 'full_name')
-            ->where(DB::raw('lower(full_name)'), 'like', '%' . strtolower($searchKey) . '%')
-            ->orWhere(DB::raw('lower(short_name)'), 'like', '%' . strtolower($searchKey) . '%')
+            ->where(DB::raw('lower(full_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(short_name)'), 'REGEXP', strtolower($searchKey))
             ->get();
     }
 
     public function postSearch($searchKey) {
         return DB::table('posts')
             ->select('id', 'title', 'content')
-            ->where(DB::raw('lower(title)'), 'like', '%' . strtolower($searchKey) . '%')
-            ->orWhere(DB::raw('lower(content)'), 'like', '%' . strtolower($searchKey) . '%')
+            ->where(DB::raw('lower(title)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(content)'), 'REGEXP', strtolower($searchKey))
             ->get();
     }
 }

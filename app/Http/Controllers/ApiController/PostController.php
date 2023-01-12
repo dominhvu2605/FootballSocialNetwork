@@ -54,11 +54,6 @@ class PostController extends Controller
 
         // get list post by club
         $data = $this->postService->getPostByClub($clubId);
-        if (empty($data)) {
-            $return['message'] = 'Get post failed.';
-            $return['data'] = [];
-            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
-        }
         $return['code'] = self::HTTP_OK;
         $return['message'] = 'Get post successfully.';
         $return['data'] = $data;
@@ -73,11 +68,6 @@ class PostController extends Controller
 
         // get list post by club
         $data = $this->postService->getPostByFootballer($footballerId);
-        if (empty($data)) {
-            $return['message'] = 'Get post failed.';
-            $return['data'] = [];
-            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
-        }
         $return['code'] = self::HTTP_OK;
         $return['message'] = 'Get post successfully.';
         $return['data'] = $data;
