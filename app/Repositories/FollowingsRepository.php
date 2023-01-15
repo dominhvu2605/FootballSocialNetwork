@@ -28,7 +28,7 @@ class FollowingsRepository {
     // suggest
     public function getFamousClubs() {
         return DB::table('followings as fl')
-            ->select('fl.club_id_fl', 'clubs.full_name', DB::raw("count(fl.user_id) as count"))
+            ->select('fl.club_id_fl as id', 'clubs.full_name', DB::raw("count(fl.user_id) as count"))
             ->join('clubs', 'clubs.id', '=', 'fl.club_id_fl')
             ->whereNotNull('fl.followings_at')
             ->groupBy('fl.club_id_fl', 'clubs.full_name')
@@ -46,7 +46,7 @@ class FollowingsRepository {
 
     public function getFamousFootballer() {
         return DB::table('followings as fl')
-            ->select('fl.footballer_id_fl', 'fb.full_name', DB::raw("count(fl.user_id) as count"))
+            ->select('fl.footballer_id_fl as id', 'fb.full_name', DB::raw("count(fl.user_id) as count"))
             ->join('footballers as fb', 'fb.id', '=', 'fl.footballer_id_fl')
             ->whereNotNull('fl.followings_at')
             ->groupBy('fl.footballer_id_fl', 'fb.full_name')

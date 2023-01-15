@@ -113,7 +113,7 @@ class FollowingsService {
         $followedClubs = $this->flRepo->getFollowedClubs($data['userId']);
         $listClub = [];
         foreach ($listFamousClubs as $famousClub) {
-            if (in_array($famousClub->club_id_fl, $followedClubs)) {
+            if (in_array($famousClub->id, $followedClubs)) {
                 continue;
             }
             unset($famousClub->count);
@@ -135,7 +135,10 @@ class FollowingsService {
             }
         }
         foreach ($listClub as $key => $club) {
-            $listClub[$key] = $club->full_name;
+            $listClub[$key] = [
+                'id' => $club->id,
+                'name' => $club->full_name
+            ];
         }
         // return data
         $return['status'] = true;
@@ -165,7 +168,7 @@ class FollowingsService {
         $followedFootballers = $this->flRepo->getFollowedFootballers($data['userId']);
         $listFootballer = [];
         foreach ($listFamousFootballer as $famousFootballer) {
-            if (in_array($famousFootballer->footballer_id_fl, $followedFootballers)) {
+            if (in_array($famousFootballer->id, $followedFootballers)) {
                 continue;
             }
             unset($famousFootballer->count);
@@ -187,7 +190,10 @@ class FollowingsService {
             }
         }
         foreach ($listFootballer as $key => $footballer) {
-            $listFootballer[$key] = $footballer->full_name;
+            $listFootballer[$key] =[
+                'id' => $footballer->id,
+                'name' => $footballer->full_name
+            ];
         }
         // return data
         $return['status'] = true;
