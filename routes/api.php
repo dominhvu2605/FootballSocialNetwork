@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::prefix('/auth')->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -91,6 +92,51 @@ Route::prefix('/league')->group(function() {
     Route::post('/list', [LeagueController::class, 'getListLeague']);
 });
 
+/**
+ * Admin api
+ */
+Route::prefix('/admin')->group(function() {
+    Route::prefix('/post')->group(function() {
+        Route::get('/all', [PostController::class, 'getAllPost']);
+        Route::post('/detail', [PostController::class, 'getPostDetail']);
+        Route::post('/edit', [PostController::class, 'updatePost']);
+        Route::post('/delete', [PostController::class, 'deletePost']);
+        Route::post('/create', [PostController::class, 'createPost']);
+        Route::post('/search', [PostController::class, 'searchPost']);
+    });
+    Route::prefix('/club')->group(function() {
+        Route::post('/all', [ClubController::class, 'getAllClub']);
+        Route::post('/detail', [ClubController::class, 'getInfo']);
+        Route::post('/edit', [ClubController::class, 'updateClub']);
+        Route::post('/delete', [ClubController::class, 'deleteClub']);
+        Route::post('/create', [ClubController::class, 'createClub']);
+        Route::post('/search', [ClubController::class, 'searchClub']);
+    });
+    Route::prefix('/footballer')->group(function() {
+        Route::post('/all', [FootballerController::class, 'getAllFootballer']);
+        Route::post('/detail', [FootballerController::class, 'getFootballerInfo']);
+        Route::post('/edit', [FootballerController::class, 'updateFootballer']);
+        Route::post('/delete', [FootballerController::class, 'deleteFootballer']);
+        Route::post('/create', [FootballerController::class, 'createFootballer']);
+        Route::post('/search', [FootballerController::class, 'searchFootballer']);
+    });
+    Route::prefix('/league')->group(function() {
+        Route::post('/all', [LeagueController::class, 'getListLeague']);
+        Route::post('/detail', [LeagueController::class, 'getLeagueInfo']);
+        Route::post('/edit', [LeagueController::class, 'updateLeague']);
+        Route::post('/delete', [LeagueController::class, 'deleteLeague']);
+        Route::post('/create', [LeagueController::class, 'createLeague']);
+        Route::post('/search', [LeagueController::class, 'searchLeague']);
+    });
+    Route::prefix('/match')->group(function() {
+        Route::post('/all', [MatchController::class, 'getListMatch']);
+        Route::post('/detail', [MatchController::class, 'getMatchInfo']);
+        Route::post('/edit', [MatchController::class, 'updateMatch']);
+        Route::post('/delete', [MatchController::class, 'deleteMatch']);
+        Route::post('/create', [MatchController::class, 'createMatch']);
+        Route::post('/search', [MatchController::class, 'searchMatch']);
+    });
+});
 
 Route::get('/user', function(Request $request) {
     return response()->json($request->bearerToken());

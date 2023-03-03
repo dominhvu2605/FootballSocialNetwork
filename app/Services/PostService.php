@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\PostRepository;
 use App\Repositories\ClubRepository;
 use App\Repositories\FootballerRepository;
+use Illuminate\Support\Facades\Validator;
 
 class PostService {
     /**
@@ -75,5 +76,149 @@ class PostService {
         // get list post by searchKey
         $postList = $this->postRepo->getPostBySearchKey($searchKey);
         return $postList;
+    }
+
+    public function getAllPost() {
+        $postList = $this->postRepo->getAllPost();
+        return $postList;
+    }
+
+    public function getPostDetail($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'postId' => 'required|numeric|exists:posts,id'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // get post detail
+        $postDetail = $this->postRepo->getPostDetail($data['postId']);
+        $return['status'] = true;
+        $return['message'] = 'Get post detail successfully.';
+        $return['data'] = $postDetail;
+        return $return;
+    }
+
+    public function updatePost($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'postId' => 'required|numeric|exists:posts,id',
+            'title' => 'required|max:65535',
+            'content' => 'required|max:16777215'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // update post
+        $dataUpdate = [
+            'title' => $data['title'],
+            'content' => $data['content']
+        ];
+        $updateResult = $this->postRepo->updatePost($data['postId'], $dataUpdate);
+        if (!$updateResult) {
+            $return['message'] = 'Update post information failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Update post information successfully.';
+        return $return;
+    }
+
+    public function deletePost($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'postId' => 'required|numeric|exists:posts,id'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // delete post
+        $result = $this->postRepo->deletePost($data['postId']);
+        if (!$result) {
+            $return['message'] = 'Delete post failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Delete post successfully.';
+        return $return;
+    }
+
+    public function createPost($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'title' => 'required|max:65535',
+            'content' => 'required|max:16777215'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // update post
+        $newData = [
+            'title' => $data['title'],
+            'content' => $data['content']
+        ];
+        $result = $this->postRepo->createNewPost($newData);
+        if (!$result) {
+            $return['message'] = 'Create new post failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Create new post successfully.';
+        return $return;
+    }
+
+    public function searchPost($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'searchKey' => 'required'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // search post
+        $result = $this->postRepo->searchPost($data['searchKey']);
+        if (!$result) {
+            $return['message'] = 'Search post by key failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Search post by key successfully.';
+        $return['data'] = $result;
+        return $return;
     }
 }

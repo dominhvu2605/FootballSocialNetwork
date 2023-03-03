@@ -44,4 +44,91 @@ class LeagueController extends Controller
         $return['data'] = $data['data'];
         return response()->json($return, self::HTTP_OK);
     }
+
+    public function getLeagueInfo(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get match schedule
+        $data = $this->leagueService->getLeagueInfo($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        $return['data'] = $data['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function updateLeague(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get match schedule
+        $data = $this->leagueService->updateLeague($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function deleteLeague(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get match schedule
+        $data = $this->leagueService->deleteLeague($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function createLeague(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get match schedule
+        $data = $this->leagueService->createLeague($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function searchLeague(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->leagueService->searchLeague($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        $return['data'] = $result['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
 }

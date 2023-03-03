@@ -93,4 +93,85 @@ class MatchService {
         $return['data'] = $scheduleFinal;
         return $return;
     }
+
+    public function getListMatch() {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        $schedule = $this->matchRepo->getListMatch();
+        $return['status'] = true;
+        $return['message'] = 'Get list matches successfully.';
+        $return['data'] = $schedule;
+        return $return;
+    }
+
+    public function getMatchInfo($data) {
+        $return = [
+            'status' => true,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'matchId' => 'required|numeric|exists:matches,id'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // get matches schedule by day
+        $matchInfo = $this->matchRepo->getMatchInfo($data['matchId']);
+        $return['message'] = 'Get matche info successfully.';
+        $return['data'] = $matchInfo;
+        return $return;
+    }
+
+    public function updateMatch($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'matchId' => 'required|numeric|exists:matches,id',
+            'homeTeamId' => 'required|numeric|exists:clubs,id',
+            'awayTeamId' => 'required|numeric|exists:clubs,id',
+            'leagueId' => 'required|numeric|exists:leagues,id',
+            'timeStart' => 'date_format:d-m-Y H:i:s',
+            'stadium' => 'max:255',
+            'statusId' => 'required|numeric|exists:matches_status,id',
+            'predictedResult' => 'max:50',
+            'result' => 'max:50',
+            'penaltyResult' => 'max:50'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // create data to update
+        $updateData = [
+            'home_team_id' => $data['homeTeamId'],
+            'away_team_id' => $data['awayTeamId'],
+            'league_id' => $data['leagueId'],
+            'time_start' => isset($data['timeStart']) ? date('Y-m-d H:i:s', strtotime($data['timeStart'])) : null,
+            'stadium' => isset($data['stadium']) ? $data['stadium'] : null,
+            'status_id' => $data['statusId'],
+            'predicted_result' => isset($data['predictedResult']) ? $data['predictedResult'] : null,
+            'result' => isset($data['result']) ? $data['predictedResult'] : null,
+            'penalty_result' => isset($data['penaltyResult']) ? $data['penaltyResult'] : null,
+        ];
+        if ($this->matchRepo->updateMatch($data['matchId'], $updateData)) {
+            $return['status'] = true;
+            $return['message'] = 'Update matches info successfully.';
+            return $return;
+        }
+
+        $return['message'] = 'Update matches info failed.';
+        return $return;
+    }
 }

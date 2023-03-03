@@ -62,4 +62,57 @@ class MatchController extends Controller
         $return['data'] = $data['data'];
         return response()->json($return, self::HTTP_OK);
     }
+
+    public function getListMatch() {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get club information
+        $data = $this->matchService->getListMatch();
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        $return['data'] = $data['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function getMatchInfo(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get club information
+        $data = $this->matchService->getMatchInfo($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        $return['data'] = $data['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function updateMatch(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get club information
+        $data = $this->matchService->updateMatch($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
 }
