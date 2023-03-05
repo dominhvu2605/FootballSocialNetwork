@@ -115,4 +115,56 @@ class MatchController extends Controller
         $return['message'] = $data['message'];
         return response()->json($return, self::HTTP_OK);
     }
+
+    public function deleteMatch(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->matchService->deleteMatch($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function createMatch(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->matchService->createMatch($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function searchMatch(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->matchService->searchMatch($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        $return['data'] = $result['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
 }

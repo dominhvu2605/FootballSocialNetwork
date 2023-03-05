@@ -109,7 +109,7 @@ class MatchService {
 
     public function getMatchInfo($data) {
         $return = [
-            'status' => true,
+            'status' => false,
             'message' => ''
         ];
 
@@ -124,7 +124,8 @@ class MatchService {
 
         // get matches schedule by day
         $matchInfo = $this->matchRepo->getMatchInfo($data['matchId']);
-        $return['message'] = 'Get matche info successfully.';
+        $return['status'] = true;
+        $return['message'] = 'Get match info successfully.';
         $return['data'] = $matchInfo;
         return $return;
     }
@@ -139,7 +140,7 @@ class MatchService {
         $validate = Validator::make($data, [
             'matchId' => 'required|numeric|exists:matches,id',
             'homeTeamId' => 'required|numeric|exists:clubs,id',
-            'awayTeamId' => 'required|numeric|exists:clubs,id',
+            'awayTeamId' => 'required|numeric|exists:clubs,id|different:homeTeamId',
             'leagueId' => 'required|numeric|exists:leagues,id',
             'timeStart' => 'date_format:d-m-Y H:i:s',
             'stadium' => 'max:255',
@@ -167,11 +168,110 @@ class MatchService {
         ];
         if ($this->matchRepo->updateMatch($data['matchId'], $updateData)) {
             $return['status'] = true;
-            $return['message'] = 'Update matches info successfully.';
+            $return['message'] = 'Update match info successfully.';
             return $return;
         }
 
-        $return['message'] = 'Update matches info failed.';
+        $return['message'] = 'Update match info failed.';
+        return $return;
+    }
+
+    public function deleteMatch($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'matchId' => 'required|numeric|exists:matches,id'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // delete match
+        $result = $this->matchRepo->deleteMatch($data['matchId']);
+        if (!$result) {
+            $return['message'] = 'Delete match failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Delete match successfully.';
+        return $return;
+    }
+
+    public function createMatch($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'homeTeamId' => 'required|numeric|exists:clubs,id',
+            'awayTeamId' => 'required|numeric|exists:clubs,id|different:homeTeamId',
+            'leagueId' => 'required|numeric|exists:leagues,id',
+            'timeStart' => 'date_format:d-m-Y H:i:s',
+            'stadium' => 'max:255',
+            'statusId' => 'required|numeric|exists:matches_status,id',
+            'predictedResult' => 'max:50',
+            'result' => 'max:50',
+            'penaltyResult' => 'max:50'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // create data to update
+        $newData = [
+            'home_team_id' => $data['homeTeamId'],
+            'away_team_id' => $data['awayTeamId'],
+            'league_id' => $data['leagueId'],
+            'time_start' => isset($data['timeStart']) ? date('Y-m-d H:i:s', strtotime($data['timeStart'])) : null,
+            'stadium' => isset($data['stadium']) ? $data['stadium'] : null,
+            'status_id' => $data['statusId'],
+            'predicted_result' => isset($data['predictedResult']) ? $data['predictedResult'] : null,
+            'result' => isset($data['result']) ? $data['predictedResult'] : null,
+            'penalty_result' => isset($data['penaltyResult']) ? $data['penaltyResult'] : null,
+        ];
+
+        $result = $this->matchRepo->createNewMatch($newData);
+        if (!$result) {
+            $return['message'] = 'Create new match failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Create new match successfully.';
+        return $return;
+    }
+
+    public function searchMatch($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'searchKey' => 'required'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // search post
+        $result = $this->matchRepo->searchMatch($data['searchKey']);
+        if (!$result) {
+            $return['message'] = 'Search match by key failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Search match by key successfully.';
+        $return['data'] = $result;
         return $return;
     }
 }

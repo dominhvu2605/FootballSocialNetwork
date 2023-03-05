@@ -54,4 +54,41 @@ class AuthRepository {
                 ->where('phone', '=', $phone)
                 ->first();
     }
+
+    public function getListUser() {
+        return DB::table('users')
+                ->select('id', 'user_name', 'phone')
+                ->orderBy('modified_at', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->get();
+    }
+
+    public function getUserInfoById($userId) {
+        return DB::table('users')
+                ->select('id', 'user_name', 'phone')
+                ->where('id', '=', $userId)
+                ->first();
+    }
+
+    public function updateUser($userId, $dataUpdate) {
+        return DB::table('users')
+            ->where('id', '=', $userId)
+            ->update($dataUpdate);
+    }
+
+    public function deleteUser($userId) {
+        return DB::table('users')
+            ->where('id', '=', $userId)
+            ->delete();
+    }
+
+    public function searchUser($searchKey) {
+        return DB::table('users')
+            ->select('id', 'user_name', 'phone')
+            ->where(DB::raw('lower(user_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(phone)'), 'REGEXP', strtolower($searchKey))
+            ->orderBy('modified_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
 }

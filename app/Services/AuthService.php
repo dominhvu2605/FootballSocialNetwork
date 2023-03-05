@@ -56,6 +56,7 @@ class AuthService {
             $userInfo['password'] = Hash::make($userInfo['password']);
             $this->authRepo->register($userInfo);
             $return['status'] = true;
+            $return['message'] = 'Create new user successfully.';
             return $return;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -338,5 +339,126 @@ class AuthService {
             $pass[] = $alphabet[$n];
         }
         return implode($pass);
+    }
+
+    public function getListUser() {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        $listUsers = $this->authRepo->getListUser();
+        $return['status'] = true;
+        $return['message'] = 'Get list users successfully.';
+        $return['data'] = $listUsers;
+        return $return;
+    }
+
+    public function getUserInfo($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'userId' => 'required|numeric|exists:users,id'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // get user info
+        $userInfo = $this->authRepo->getUserInfoById($data['userId']);
+        $return['status'] = true;
+        $return['message'] = 'Get user info successfully.';
+        $return['data'] = $userInfo;
+        return $return;
+    }
+
+    public function updateUser($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'userId' => 'required|numeric|exists:users,id',
+            'userName' => 'required|string|max:50',
+            'phone' => 'required|string|max:13|unique:users,phone'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // create data to update
+        $updateData = [
+            'user_name' => $data['userName'],
+            'phone' => $data['phone']
+        ];
+        if ($this->authRepo->updateUser($data['userId'], $updateData)) {
+            $return['status'] = true;
+            $return['message'] = 'Update user info successfully.';
+            return $return;
+        }
+
+        $return['message'] = 'Update user info failed.';
+        return $return;
+    }
+
+    public function deleteUser($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'userId' => 'required|numeric|exists:users,id'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // delete user
+        $result = $this->authRepo->deleteUser($data['userId']);
+        if (!$result) {
+            $return['message'] = 'Delete user failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Delete user successfully.';
+        return $return;
+    }
+
+    public function searchUser($data) {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // validate input
+        $validate = Validator::make($data, [
+            'searchKey' => 'required'
+        ]);
+        if ($validate->fails()) {
+            $return['message'] = $validate->errors()->first();
+            return $return;
+        }
+
+        // search post
+        $result = $this->authRepo->searchUser($data['searchKey']);
+        if (!$result) {
+            $return['message'] = 'Search user by key failed.';
+            return $return;
+        }
+        $return['status'] = true;
+        $return['message'] = 'Search user by key successfully.';
+        $return['data'] = $result;
+        return $return;
     }
 }

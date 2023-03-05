@@ -10,7 +10,6 @@ use App\Http\Controllers\ApiController\LikeController;
 use App\Http\Controllers\ApiController\MatchController;
 use App\Http\Controllers\ApiController\PostController;
 use App\Http\Controllers\ApiController\SearchController;
-use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -136,8 +135,16 @@ Route::prefix('/admin')->group(function() {
         Route::post('/create', [MatchController::class, 'createMatch']);
         Route::post('/search', [MatchController::class, 'searchMatch']);
     });
+    Route::prefix('/user')->group(function() {
+        Route::post('/all', [AuthController::class, 'getListUser']);
+        Route::post('/detail', [AuthController::class, 'getUserInfo']);
+        Route::post('/edit', [AuthController::class, 'updateUser']);
+        Route::post('/delete', [AuthController::class, 'deleteUser']);
+        Route::post('/create', [AuthController::class, 'createUser']);
+        Route::post('/search', [AuthController::class, 'searchUser']);
+    });
 });
 
 Route::get('/user', function(Request $request) {
-    return response()->json($request->bearerToken());
-})->middleware('CheckAuth');
+    return response()->json(['code' => '200', 'message' => 'done']);
+})->middleware('CheckAuth:admin');

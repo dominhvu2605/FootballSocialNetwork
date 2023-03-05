@@ -133,4 +133,46 @@ class MatchRepository {
             ->where('id', '=', $matchId)
             ->update($dataUpdate);
     }
+
+    public function deleteMatch($matchId) {
+        return DB::table('matches')
+            ->where('id', '=', $matchId)
+            ->delete();
+    }
+
+    public function createNewMatch($newData) {
+        return DB::table('matches')
+            ->insert($newData);
+    }
+
+    public function searchMatch($searchKey) {
+        $listMatch = DB::table('matches as m')
+            ->select(
+                'm.id as match_id',
+                'hteam.id as home_team_id',
+                'hteam.full_name as home_team_name',
+                'ateam.id as away_team_id',
+                'ateam.full_name as away_team_name',
+                'l.id as league_id',
+                'l.name as league_name',
+                'm.time_start',
+                'm.stadium',
+                'ms.name as match_status',
+                'm.predicted_result',
+                'm.result',
+                'm.penalty_result'
+            )
+            ->join('clubs as hteam', 'hteam.id', '=', 'm.home_team_id')
+            ->join('clubs as ateam', 'ateam.id', '=', 'm.away_team_id')
+            ->join('leagues as l', 'l.id', '=', 'm.league_id')
+            ->join('matches_status as ms', 'm.status_id', '=', 'ms.id')
+            ->where(DB::raw('lower(hteam.full_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(ateam.full_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(l.name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(m.stadium)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(m.time_start)'), 'REGEXP', strtolower($searchKey))
+            ->orderBy('m.time_start', 'desc')
+            ->get();
+        return $listMatch;
+    }
 }

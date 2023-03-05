@@ -157,4 +157,108 @@ class AuthController extends Controller
         $return['message'] = $forgotPassResult['message'];
         return response()->json($return, self::HTTP_OK);
     }
+
+    /**
+     * For admin api
+     */
+    public function getListUser() {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // get list post
+        $result = $this->authService->getListUser();
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        $return['data'] = $result['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function getUserInfo(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // gt user info
+        $data = $this->authService->getUserInfo($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        $return['data'] = $data['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function updateUser(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update user info
+        $data = $this->authService->updateUser($request->all());
+        if (!$data['status']) {
+            $return['message'] = $data['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $data['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function deleteUser(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->authService->deleteUser($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function createUser(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->authService->register($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        return response()->json($return, self::HTTP_OK);
+    }
+
+    public function searchUser(Request $request) {
+        $return = [
+            'code' => self::HTTP_UNPROCESSABLE_ENTITY,
+            'message' => ''
+        ];
+
+        // update post
+        $result = $this->authService->searchUser($request->all());
+        if (!$result['status']) {
+            $return['message'] = $result['message'];
+            return response()->json($return, self::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $return['code'] = self::HTTP_OK;
+        $return['message'] = $result['message'];
+        $return['data'] = $result['data'];
+        return response()->json($return, self::HTTP_OK);
+    }
 }
