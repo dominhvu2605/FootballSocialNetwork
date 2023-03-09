@@ -42,7 +42,8 @@ class PostController extends Controller
         }
         $return['code'] = self::HTTP_OK;
         $return['message'] = 'Get post successfully.';
-        $return['data'] = $data;
+        $return['totalPages'] = $data['totalPages'];
+        $return['data'] = $data['data'];
         return response()->json($return, self::HTTP_OK);
     }
 
@@ -92,7 +93,8 @@ class PostController extends Controller
         }
         $return['code'] = self::HTTP_OK;
         $return['message'] = 'Get post successfully.';
-        $return['data'] = $data;
+        $return['totalPages'] = $data['totalPages'];
+        $return['data'] = $data['data'];
         return response()->json($return, self::HTTP_OK);
     }
 

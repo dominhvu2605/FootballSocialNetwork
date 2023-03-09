@@ -9,13 +9,9 @@ class PostRepository {
     public function getPostList() {
         return DB::table('posts')
             ->whereNull('deleted_at')
-            ->orderBy('created_at', 'desc')
             ->orderBy('modified_at', 'desc')
-            ->paginate(config('constants.perPage'))
-            ->getCollection()
-            ->map(function($item) {
-                return $item;
-            })->toArray();
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('constants.perPage'));
     }
 
     public function getPostBySearchKey($searchKey) {
@@ -49,7 +45,7 @@ class PostRepository {
             ->whereNull('deleted_at')
             ->orderBy('created_at', 'desc')
             ->orderBy('modified_at', 'desc')
-            ->get();
+            ->paginate(config('constants.perPage'));
     }
 
     public function getPostDetail($postId) {

@@ -39,7 +39,9 @@ class FootballerRepository {
             ->select('fb.id', 'fb.full_name', 'fb.short_name', 'fb.nationality', 'fb.place_of_birth', 'fb.date_of_birth',
                     'fb.height', 'fb.club_id', 'clubs.full_name as club_name', 'fb.clothers_number', 'fb.market_price')
             ->join('clubs', 'clubs.id', '=', 'fb.club_id')
-            ->get();
+            ->orderBy('fb.modified_at', 'desc')
+            ->orderBy('fb.created_at', 'desc')
+            ->paginate(config('constants.perPage'));
     }
 
     public function updateFootballer($footballerId, $dataUpdate) {

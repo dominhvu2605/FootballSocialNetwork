@@ -348,9 +348,11 @@ class AuthService {
         ];
 
         $listUsers = $this->authRepo->getListUser();
+        $listUsers = json_decode(json_encode($listUsers));
         $return['status'] = true;
         $return['message'] = 'Get list users successfully.';
-        $return['data'] = $listUsers;
+        $return['totalPages'] = $listUsers->last_page;
+        $return['data'] = $listUsers->data;
         return $return;
     }
 

@@ -49,9 +49,11 @@ class FootballerService {
 
         // get list footballer of club
         $allFootballer = $this->fbRepo->getAllFbForAdmin();
+        $allFootballer = json_decode(json_encode($allFootballer));
         $return['status'] = true;
         $return['message'] = 'Get all footballer successfully.';
-        $return['data'] = $allFootballer;
+        $return['totalPages'] = $allFootballer->last_page;
+        $return['data'] = $allFootballer->data;
         return $return;
     }
 

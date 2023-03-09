@@ -171,6 +171,7 @@ class AuthController extends Controller
         $result = $this->authService->getListUser();
         $return['code'] = self::HTTP_OK;
         $return['message'] = $result['message'];
+        $return['totalPages'] = $result['totalPages'];
         $return['data'] = $result['data'];
         return response()->json($return, self::HTTP_OK);
     }

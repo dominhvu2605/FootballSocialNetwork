@@ -97,7 +97,7 @@ class MatchRepository {
             ->join('leagues as l', 'l.id', '=', 'm.league_id')
             ->join('matches_status as ms', 'm.status_id', '=', 'ms.id')
             ->orderBy('m.time_start', 'desc')
-            ->get();
+            ->paginate(config('constants.perPage'));
         return $schedule;
     }
 

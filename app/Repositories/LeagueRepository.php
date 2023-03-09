@@ -20,6 +20,15 @@ class LeagueRepository {
             ->first();
     }
 
+    public function getListLeagueForAdmin() {
+        return DB::table('leagues')
+            ->select('id', 'name', 'short_name')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('modified_at', 'desc')
+            ->paginate(config('constants.perPage'));
+    }
+
     public function updateLeague($leagueId, $dataUpdate) {
         return DB::table('leagues')
             ->where('id', '=', $leagueId)

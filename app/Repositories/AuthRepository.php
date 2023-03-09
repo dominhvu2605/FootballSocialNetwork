@@ -60,7 +60,7 @@ class AuthRepository {
                 ->select('id', 'user_name', 'phone')
                 ->orderBy('modified_at', 'desc')
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->paginate(config('constants.perPage'));
     }
 
     public function getUserInfoById($userId) {

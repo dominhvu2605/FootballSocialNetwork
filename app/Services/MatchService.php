@@ -101,9 +101,11 @@ class MatchService {
         ];
 
         $schedule = $this->matchRepo->getListMatch();
+        $schedule = json_decode(json_encode($schedule));
         $return['status'] = true;
         $return['message'] = 'Get list matches successfully.';
-        $return['data'] = $schedule;
+        $return['totalPages'] = $schedule->last_page;
+        $return['data'] = $schedule->data;
         return $return;
     }
 

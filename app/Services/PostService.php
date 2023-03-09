@@ -7,6 +7,8 @@ use App\Repositories\ClubRepository;
 use App\Repositories\FootballerRepository;
 use Illuminate\Support\Facades\Validator;
 
+use function PHPSTORM_META\type;
+
 class PostService {
     /**
      * @var PostRepository
@@ -32,8 +34,12 @@ class PostService {
     }
 
     public function getPostList() {
+        $return = [];
         $postList = $this->postRepo->getPostList();
-        return $postList;
+        $postList = json_decode(json_encode($postList));
+        $return['totalPages'] = $postList->last_page;
+        $return['data'] = $postList->data;
+        return $return;
     }
 
     public function getPostByClub($clubId) {
@@ -79,8 +85,12 @@ class PostService {
     }
 
     public function getAllPost() {
+        $return = [];
         $postList = $this->postRepo->getAllPost();
-        return $postList;
+        $postList = json_decode(json_encode($postList));
+        $return['totalPages'] = $postList->last_page;
+        $return['data'] = $postList->data;
+        return $return;
     }
 
     public function getPostDetail($data) {

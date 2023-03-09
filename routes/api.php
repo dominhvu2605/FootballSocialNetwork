@@ -120,7 +120,7 @@ Route::prefix('/admin')->group(function() {
         Route::post('/search', [FootballerController::class, 'searchFootballer']);
     });
     Route::prefix('/league')->group(function() {
-        Route::post('/all', [LeagueController::class, 'getListLeague']);
+        Route::post('/all', [LeagueController::class, 'getListLeagueForAdmin']);
         Route::post('/detail', [LeagueController::class, 'getLeagueInfo']);
         Route::post('/edit', [LeagueController::class, 'updateLeague']);
         Route::post('/delete', [LeagueController::class, 'deleteLeague']);

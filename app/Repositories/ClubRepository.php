@@ -16,7 +16,9 @@ class ClubRepository {
     public function getAllClub() {
         return DB::table('clubs')
             ->select('id', 'full_name', 'short_name', 'founded_in', 'owner', 'website')
-            ->get();
+            ->orderBy('modified_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('constants.perPage'));
     }
 
     public function getClubInfo($clubId) {

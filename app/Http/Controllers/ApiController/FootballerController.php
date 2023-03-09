@@ -59,6 +59,7 @@ class FootballerController extends Controller
         }
         $return['code'] = self::HTTP_OK;
         $return['message'] = $data['message'];
+        $return['totalPages'] = $data['totalPages'];
         $return['data'] = $data['data'];
         return response()->json($return, self::HTTP_OK);
     }

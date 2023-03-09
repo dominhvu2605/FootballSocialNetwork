@@ -32,6 +32,22 @@ class LeagueService {
         return $return;
     }
 
+    public function getListLeagueForAdmin() {
+        $return = [
+            'status' => false,
+            'message' => ''
+        ];
+
+        // get list league
+        $leagues = $this->leagueRepo->getListLeagueForAdmin();
+        $leagues = json_decode(json_encode($leagues));
+        $return['status'] = true;
+        $return['message'] = 'Get list leagues successfully.';
+        $return['totalPages'] = $leagues->last_page;
+        $return['data'] = $leagues->data;
+        return $return;
+    }
+
     public function getLeagueInfo($data) {
         $return = [
             'status' => false,

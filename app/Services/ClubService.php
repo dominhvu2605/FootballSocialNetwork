@@ -79,9 +79,11 @@ class ClubService {
 
         // get list footballer of club
         $allClub = $this->clubRepo->getAllClub();
+        $allClub = json_decode(json_encode($allClub));
         $return['status'] = true;
         $return['message'] = 'Get all club successfully.';
-        $return['data'] = $allClub;
+        $return['totalPages'] = $allClub->last_page;
+        $return['data'] = $allClub->data;
         return $return;
     }
 
