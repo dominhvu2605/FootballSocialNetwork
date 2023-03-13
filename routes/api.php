@@ -96,7 +96,7 @@ Route::prefix('/league')->group(function() {
  */
 Route::prefix('/admin')->group(function() {
     Route::prefix('/post')->group(function() {
-        Route::get('/all', [PostController::class, 'getAllPost']);
+        Route::get('/all', [PostController::class, 'getAllPost'])->middleware('CheckAuth:admin');
         Route::post('/detail', [PostController::class, 'getPostDetail']);
         Route::post('/edit', [PostController::class, 'updatePost']);
         Route::post('/delete', [PostController::class, 'deletePost']);
