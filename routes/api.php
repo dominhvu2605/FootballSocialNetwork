@@ -37,6 +37,7 @@ Route::prefix('/auth')->group(function() {
 
 Route::prefix('/post')->group(function() {
     Route::get('/get_post_list', [PostController::class, 'getPostList']);
+    Route::post('/get_post_detail', [PostController::class, 'getPostDetail']);
     Route::get('/get_club_post/{clubId}', [PostController::class, 'getPostByClub']);
     Route::get('/get_footballer_post/{footballerId}', [PostController::class, 'getPostByFootballer']);
 });
@@ -94,9 +95,9 @@ Route::prefix('/league')->group(function() {
 /**
  * Admin api
  */
-Route::prefix('/admin')->group(function() {
+Route::prefix('/admin')->middleware('CheckAuth:admin')->group(function() {
     Route::prefix('/post')->group(function() {
-        Route::get('/all', [PostController::class, 'getAllPost'])->middleware('CheckAuth:admin');
+        Route::get('/all', [PostController::class, 'getAllPost']);
         Route::post('/detail', [PostController::class, 'getPostDetail']);
         Route::post('/edit', [PostController::class, 'updatePost']);
         Route::post('/delete', [PostController::class, 'deletePost']);
