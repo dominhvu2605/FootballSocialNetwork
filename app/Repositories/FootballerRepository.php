@@ -63,17 +63,18 @@ class FootballerRepository {
     }
 
     public function searchFootballer($searchKey) {
-        return DB::table('footballers')
-            ->select('*')
-            ->where(DB::raw('lower(full_name)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(short_name)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(nationality)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(place_of_birth)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(date_of_birth)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(height)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(club_id)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(clothers_number)'), 'REGEXP', strtolower($searchKey))
-            ->orWhere(DB::raw('lower(market_price)'), 'REGEXP', strtolower($searchKey))
+        return DB::table('footballers as fb')
+            ->select('fb.*', 'clubs.full_name as club_name')
+            ->join('clubs', 'clubs.id', '=', 'fb.club_id')
+            ->where(DB::raw('lower(fb.full_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.short_name)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.nationality)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.place_of_birth)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.date_of_birth)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.height)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.club_id)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.clothers_number)'), 'REGEXP', strtolower($searchKey))
+            ->orWhere(DB::raw('lower(fb.market_price)'), 'REGEXP', strtolower($searchKey))
             ->get();
     }
 }
